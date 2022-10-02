@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Usage instructions when no arguments are supplied.
+
 ## [0.1.0] - 2022-10-02
 
-- Initialized project
+- Initialized project.
 
 [Unreleased]: https://github.com/sonro/narrate/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/sonro/narrate/releases/tag/v0.1.0

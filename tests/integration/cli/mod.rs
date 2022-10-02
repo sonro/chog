@@ -1,6 +1,15 @@
-mod cli;
+use self::util::{assert_stderr, assert_stdout, test_program};
 
-const USAGE: &str = r#"chog 0.1.0
+mod util;
+
+#[test]
+fn no_args_prints_usage_to_stdout() {
+    let output = test_program(&[], "");
+    assert_stderr("", &output);
+    assert_stdout(EXPECTED_HELP, &output);
+}
+
+const EXPECTED_HELP: &str = r#"chog 0.1.0
 
 USAGE:
     chog [OPTIONS] [COMMAND]
@@ -42,7 +51,3 @@ OPTIONS:
         Using this option disables user confirmation.
 
 "#;
-
-fn main() {
-    print!("{}", USAGE);
-}
