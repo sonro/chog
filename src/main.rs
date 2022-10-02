@@ -1,11 +1,13 @@
+use cli::App;
+
 mod cli;
 
 const USAGE: &str = r#"chog 0.1.0
 
 USAGE:
-    chog [OPTIONS] [COMMAND]
+    chog [OPTIONS] [VERSION]
 
-COMMANDS:
+VERSIONS:
     major 
         Increase the major number - x.*.*
 
@@ -44,5 +46,13 @@ OPTIONS:
 "#;
 
 fn main() {
-    print!("{}", USAGE);
+    let args: Vec<String> = std::env::args().skip(1).collect();
+    let res = cli::App::new(&args);
+    match res {
+        Ok(app) if app.help => print!("{}", USAGE),
+        Err(err) => eprint!("Argument error: {}\n{}", err, USAGE),
+        Ok(app) => run(&app),
+    }
 }
+
+fn run(_app: &App) {}
