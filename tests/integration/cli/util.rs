@@ -52,7 +52,7 @@ pub fn assert_stderr(expected: &str, output: &Output) {
 fn assert_output(expected: &str, actual: &str) {
     assert_eq!(
         expected, actual,
-        "\n# EXPECTED:\n{}# ACTUAL:\n{}",
+        "\n# EXPECTED:\n{}\n# ACTUAL:\n{}",
         expected, actual
     );
 }

@@ -1,8 +1,10 @@
+use std::process::exit;
+
 use cli::App;
 
 mod cli;
 
-const USAGE: &str = r#"chog 0.1.0
+const HELP: &str = r#"chog 0.1.0
 
 USAGE:
     chog [OPTIONS] [VERSION]
@@ -52,8 +54,14 @@ fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();
     let res = cli::App::new(&args);
     match res {
-        Ok(app) if app.help => print!("{}", USAGE),
-        Err(err) => eprint!("Argument error: {}\n{}", err, USAGE),
+        Ok(app) if app.help => print!("{}", HELP),
+        Err(err) => {
+            eprintln!(
+                "Argument error: {}\n\nSee `--help` option for usage information.",
+                err
+            );
+            exit(64);
+        }
         Ok(app) => run(&app),
     }
 }
