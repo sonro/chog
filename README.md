@@ -13,12 +13,12 @@ changelogs.
 `chog` is highly opinionated. In order for it to be effective it is recommended
 to:
 
-- Your formatting follows [Keep a Changelog].
+- Format changelog in reference to [Keep a Changelog].
 - Use git as your version control system.
 - Host your repository on GitHub.
 - Tag your versions using the v0.0.0 style.
 - Use [Semantic Versioning](https://semver.org/).
-- Your file name is CHANGELOG.md.
+- Use CHANGELOG.md as your file name.
 
 ## License
 
