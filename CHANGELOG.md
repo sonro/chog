@@ -9,8 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Cli
+
 - Command line argument handling.
 - Usage instructions for `--help` and invalid arguments.
+
+#### Lib
+
+- Version from strings.
 
 ## [0.1.0] - 2022-10-02
 

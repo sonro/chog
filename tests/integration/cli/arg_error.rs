@@ -24,7 +24,7 @@ fn invalid_versions() {
         "balh",
     ];
     for v in invalids {
-        check_stderr(&format!("invalid custom version: `{}`", v), &[v]);
+        check_stderr(&format!("invalid version: `{}`", v), &[v]);
     }
 }
 

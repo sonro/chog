@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use chog::Version;
+use chog::{InvalidVersion, Version};
 
 use super::Error;
 
@@ -55,12 +55,7 @@ impl<'a> App<'a> {
                     args.next();
                 }
             } else {
-                version = Some(match arg {
-                    "major" => Version::Major,
-                    "minor" => Version::Minor,
-                    "patch" => Version::Patch,
-                    arg => custom_version_from_arg(arg)?,
-                });
+                version = Some(Version::try_from(arg)?);
             }
         }
 
@@ -126,36 +121,9 @@ fn path_from_arg<'a>(next_arg: Option<&&'a str>) -> Result<&'a Path, Error> {
     }
 }
 
-fn custom_version_from_arg(arg: &str) -> Result<Version, Error> {
-    let mut i = 0;
-    for part in arg.split('.') {
-        match i {
-            0 | 1 => {
-                if !part.chars().all(char::is_numeric) {
-                    // major or minor part does not contain number
-                    return Err(Error::InvalidVersion(arg.into()));
-                }
-            }
-            2 => {
-                if !part.chars().all(char::is_numeric) {
-                    if let Some(patch) = part.split('-').next() {
-                        if !patch.chars().all(char::is_numeric) {
-                            return Err(Error::InvalidVersion(arg.into()));
-                        }
-                    } else {
-                        // invalid patch format
-                        return Err(Error::InvalidVersion(arg.into()));
-                    }
-                }
-            }
-            _ => return Err(Error::InvalidVersion(arg.into())),
-        }
-        i += 1;
-    }
-    if i != 3 {
-        Err(Error::InvalidVersion(arg.into()))
-    } else {
-        Ok(Version::Custom(arg))
+impl From<InvalidVersion> for Error {
+    fn from(err: InvalidVersion) -> Self {
+        Self::InvalidVersion(err)
     }
 }
 
