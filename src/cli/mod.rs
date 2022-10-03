@@ -5,9 +5,12 @@ use std::fmt;
 pub use app::App;
 
 #[derive(Debug)]
+#[cfg_attr(test, derive(PartialEq, Eq))]
 pub enum Error {
     UnknownFlag(String),
     InvalidVersion(String),
+    NoVersion,
+    NoPath,
 }
 
 impl fmt::Display for Error {
@@ -15,6 +18,8 @@ impl fmt::Display for Error {
         match self {
             Self::UnknownFlag(flag) => write!(f, "unknown flag: `{}`", flag),
             Self::InvalidVersion(version) => write!(f, "invalid custom version: `{}`", version),
+            Self::NoVersion => write!(f, "no version provided"),
+            Self::NoPath => write!(f, "expected path for given options"),
         }
     }
 }
