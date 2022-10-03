@@ -55,6 +55,7 @@ fn main() {
     let res = cli::App::new(&args);
     match res {
         Ok(app) if app.help => print!("{}", HELP),
+        Ok(app) if app.info => print_info(&app),
         Err(err) => {
             eprintln!(
                 "Argument error: {}\n\nSee `--help` option for usage information.",
@@ -62,8 +63,10 @@ fn main() {
             );
             exit(64);
         }
-        Ok(app) => run(&app),
+        Ok(app) => update_version(&app),
     }
 }
 
-fn run(_app: &App) {}
+fn update_version(_app: &App) {}
+
+fn print_info(_app: &App) {}
