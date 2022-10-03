@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Lib
 
 - Version from strings.
+- `new` method on Version.
 
 ## [0.1.0] - 2022-10-02
 

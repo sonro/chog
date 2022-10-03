@@ -29,6 +29,12 @@ impl<'a> TryFrom<&'a str> for Version<'a> {
     }
 }
 
+impl<'a> Version<'a> {
+    pub fn new(version: &'a str) -> Result<Self, InvalidVersion> {
+        version.try_into()
+    }
+}
+
 fn validate_custom_version(v: &str) -> Result<Version, InvalidVersion> {
     let mut i = 0;
     for part in v.split('.') {
@@ -69,6 +75,22 @@ mod tests {
     fn check_try_from(expected: Version, input: &str) {
         let actual = Version::try_from(input).expect("valid version");
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn new_same_as_try_from() {
+        let version = "1.1.1";
+        let new = Version::new(version).expect("valid version");
+        let from = Version::try_from(version).expect("valid version");
+        assert_eq!(new, from);
+    }
+
+    #[test]
+    fn new_same_as_try_from_error() {
+        let version = "bad";
+        let new = Version::new(version).expect_err("invalid version");
+        let from = Version::try_from(version).expect_err("invalid version");
+        assert_eq!(new, from);
     }
 
     #[test]
