@@ -8,7 +8,6 @@ pub use app::App;
 pub enum Error {
     UnknownFlag(String),
     InvalidVersion(String),
-    NoArgs,
 }
 
 impl fmt::Display for Error {
@@ -16,7 +15,6 @@ impl fmt::Display for Error {
         match self {
             Self::UnknownFlag(flag) => write!(f, "unknown flag: `{}`", flag),
             Self::InvalidVersion(version) => write!(f, "invalid custom version: `{}`", version),
-            Self::NoArgs => write!(f, "no version"),
         }
     }
 }

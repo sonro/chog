@@ -1,16 +1,6 @@
 use super::util::{assert_stderr, assert_stdout, test_program};
 
 #[test]
-fn no_args_prints_usage_to_stderr() {
-    let output = test_program(&[], "");
-    assert_stderr(
-        &format!("Argument error: no version\n{}", EXPECTED_HELP),
-        &output,
-    );
-    assert_stdout("", &output);
-}
-
-#[test]
 fn short_help_flag_prints_usage_to_stdout() {
     let output = test_program(&["-h"], "");
     assert_stderr("", &output);
@@ -66,6 +56,9 @@ VERSIONS:
 OPTIONS:
     -h, --help
         Print this help output.
+
+    -i, --info
+        Print information about latest changelog version.
 
     -q, --quiet
         Minimal output.

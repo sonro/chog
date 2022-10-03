@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 use std::path::Path;
 
 use chog::Version;
@@ -10,6 +8,7 @@ use super::Error;
 #[cfg_attr(test, derive(PartialEq, Eq))]
 pub struct App<'a> {
     pub help: bool,
+    pub info: bool,
     pub quiet: bool,
     pub force: bool,
     pub dry_run: bool,
@@ -22,6 +21,7 @@ impl<'a> Default for App<'a> {
     fn default() -> Self {
         Self {
             help: false,
+            info: false,
             quiet: false,
             force: false,
             dry_run: false,
@@ -36,7 +36,8 @@ impl<'a> App<'a> {
     pub fn new<S: AsRef<str>>(args: &'a [S]) -> Result<Self, Error> {
         let mut app = Self::default();
         if args.is_empty() {
-            return Err(Error::NoArgs);
+            app.info = true;
+            return Ok(app);
         }
         let mut args = args.iter().map(|a| a.as_ref()).peekable();
 
@@ -60,6 +61,7 @@ impl<'a> App<'a> {
     fn handle_long_flag(&mut self, arg: &'a str, next: Option<&&'a str>) -> Result<(), Error> {
         match arg {
             "--help" => self.help = true,
+            "--info" => self.info = true,
             "--quiet" => self.quiet = true,
             "--force" => self.force = true,
             "--dry-run" => self.dry_run = true,
@@ -77,6 +79,7 @@ impl<'a> App<'a> {
                     self.help = true;
                     return Ok(());
                 }
+                'i' => self.info = true,
                 'q' => self.quiet = true,
                 'f' => self.force = true,
                 'd' => self.dry_run = true,
@@ -127,8 +130,28 @@ mod tests {
     use super::*;
 
     #[test]
-    fn no_args_should_error() {
-        let err = App::new::<&str>(&[]).expect_err("no args should error");
-        assert!(matches!(err, Error::NoArgs));
+    fn default() {
+        let actual = App::default();
+        let expected = App {
+            help: false,
+            info: false,
+            quiet: false,
+            force: false,
+            dry_run: false,
+            version: Version::Patch,
+            in_file: None,
+            out_file: None,
+        };
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn no_args_should_set_info() {
+        let app = App::new::<&str>(&[]).expect("no args shouldn't error");
+        let expected = App {
+            info: true,
+            ..Default::default()
+        };
+        assert_eq!(expected, app);
     }
 }

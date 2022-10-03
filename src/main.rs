@@ -24,6 +24,9 @@ OPTIONS:
     -h, --help
         Print this help output.
 
+    -i, --info
+        Print information about latest changelog version.
+
     -q, --quiet
         Minimal output.
 
