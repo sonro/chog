@@ -4,7 +4,12 @@ use std::{
 };
 
 pub fn test_program(args: &[&str], input: &str) -> Output {
-    let mut full_args = vec!["run", "-q", "--all-features", "--"];
+    let mut full_args = vec!["run", "-q"];
+    let target = std::env::var("RUSTC_TARGET");
+    if let Ok(ref target) = target {
+        full_args.extend_from_slice(&["--target", target]);
+    }
+    full_args.push("--");
     full_args.extend_from_slice(args);
 
     // setup program args, stdout and stderr
@@ -41,18 +46,18 @@ pub fn test_program(args: &[&str], input: &str) -> Output {
 
 pub fn assert_stdout(expected: &str, output: &Output) {
     let actual = String::from_utf8_lossy(&output.stdout);
-    assert_output(expected, &actual);
+    assert_output(expected, &actual, output);
 }
 
 pub fn assert_stderr(expected: &str, output: &Output) {
     let actual = String::from_utf8_lossy(&output.stderr);
-    assert_output(expected, &actual);
+    assert_output(expected, &actual, output);
 }
 
-fn assert_output(expected: &str, actual: &str) {
+fn assert_output(expected: &str, actual: &str, output: &Output) {
     assert_eq!(
         expected, actual,
-        "\n# EXPECTED:\n{}\n# ACTUAL:\n{}",
-        expected, actual
+        "\n# EXPECTED:\n{}\n# ACTUAL:\n{}\n{:?}",
+        expected, actual, output
     );
 }

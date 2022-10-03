@@ -104,7 +104,11 @@ mod tests {
     fn new_no_release_input() {
         // add extra newline to input
         // easier than trimming one off expected
+        #[cfg(target_family = "windows")]
+        let input = format!("{}\r\n", NO_RELEASE_CHANGELOG);
+        #[cfg(not(target_family = "windows"))]
         let input = format!("{}\n", NO_RELEASE_CHANGELOG);
+
         let chog = Changelog::new(&input);
         assert_eq!(NO_RELEASE_CHANGELOG_STRUCT, chog);
     }
@@ -118,6 +122,9 @@ mod tests {
 
     const EMPTY_UNRELEASED_CHANGELOG: &str = include_str!("../test_changelogs/empty_unreleased.md");
     const EMPTY_UNRELEASED_CHANGELOG_STRUCT: Changelog = Changelog {
+        #[cfg(target_family = "windows")]
+        unreleased_content: Some("\r\n"),
+        #[cfg(not(target_family = "windows"))]
         unreleased_content: Some("\n"),
         last_release: Some(FULL_LAST_RELEASE),
     };
@@ -135,19 +142,9 @@ mod tests {
         last_release: Some(FULL_LAST_RELEASE),
     };
 
+    const FULL_UNRELEASED_CONTENT: &str = include_str!("../test_changelogs/just_unreleased.md");
     const FULL_LAST_RELEASE: Release = Release {
         title: "1.0.0",
         url: Some("https://github.com/user/repo/releases/tag/v1.0.0"),
     };
-    const FULL_UNRELEASED_CONTENT: &str = r#"
-### Added
-
-- `Config` pretty printing.
-
-### Documentation
-
-- Fix typos in readme.
-- Add example of `Config` pretty printing.
-
-"#;
 }
