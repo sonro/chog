@@ -33,9 +33,10 @@ pub fn test_program(args: &[&str], input: &str) -> Output {
         // pipe in input
         let mut stdin = child.stdin.take().expect("Failed to get stdin handle");
         let input = input.as_bytes().to_owned();
-        std::thread::spawn(move || {
+        let handle = std::thread::spawn(move || {
             stdin.write_all(&input).expect("Failed to write to stdin");
         });
+        handle.join().expect("stdin to finish writing");
     }
 
     // run program to completion and return output
