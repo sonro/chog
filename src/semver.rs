@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{cmp::Ordering, fmt};
 
 use crate::{InvalidVersion, SemanticVersion};
 
@@ -38,7 +38,7 @@ impl<'v> TryFrom<&'v str> for SemanticVersion<'v> {
         // remove `v` prefix if it exists
         let input = input.strip_prefix('v').unwrap_or(input);
 
-        let mut parts = input.split('.');
+        let mut parts = input.splitn(3, '.');
         // major.*.*
         let major = part_from_split(parts.next())?;
         // *.minor.*
@@ -55,16 +55,12 @@ impl<'v> TryFrom<&'v str> for SemanticVersion<'v> {
             None => return Err(err()),
         };
 
-        match parts.next() {
-            // too many parts for semver e.g. 1.2.3.4
-            Some(_) => Err(err()),
-            None => Ok(Self {
-                major,
-                minor,
-                patch,
-                label,
-            }),
-        }
+        Ok(Self {
+            major,
+            minor,
+            patch,
+            label,
+        })
     }
 }
 
@@ -73,6 +69,35 @@ impl<'v> fmt::Display for SemanticVersion<'v> {
         match self.label {
             Some(label) => write!(f, "{}.{}.{}-{}", self.major, self.minor, self.patch, label),
             None => write!(f, "{}.{}.{}", self.major, self.minor, self.patch),
+        }
+    }
+}
+
+impl<'v> PartialOrd for SemanticVersion<'v> {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(Ord::cmp(self, other))
+    }
+}
+
+impl<'v> Ord for SemanticVersion<'v> {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        match self.major.cmp(&other.major) {
+            Ordering::Equal => {}
+            ord => return ord,
+        }
+        match self.minor.cmp(&other.minor) {
+            Ordering::Equal => {}
+            ord => return ord,
+        }
+        match self.patch.cmp(&other.patch) {
+            Ordering::Equal => {}
+            ord => return ord,
+        }
+        match (self.label, other.label) {
+            (Some(label), Some(other)) => label.cmp(other),
+            (Some(_), None) => Ordering::Less,
+            (None, Some(_)) => Ordering::Greater,
+            (None, None) => Ordering::Equal,
         }
     }
 }
@@ -126,6 +151,24 @@ mod tests {
         }
     }
 
+    #[test]
+    fn ordering() {
+        let low_to_high = [
+            "0.1.0",
+            "0.1.1",
+            "0.2.0-beta",
+            "0.2.0-pr.1",
+            "0.2.0-pr.2",
+            "0.2.0",
+            "1.0.0",
+        ];
+        for w in low_to_high.windows(2) {
+            let low = SemanticVersion::try_from(w[0]).expect("valid version");
+            let high = SemanticVersion::try_from(w[1]).expect("valid version");
+            assert!(low < high, "`{}` less than `{}`", low, high);
+        }
+    }
+
     fn valid_inputs_and_semvers<'v>() -> Vec<(&'v str, SemanticVersion<'v>)> {
         use crate::SemanticVersion as SV;
         vec![
@@ -142,8 +185,8 @@ mod tests {
             ("0.0.200", SV::new(0, 0, 200)),
             ("0.0.0-beta", SV::new_with_label(0, 0, 0, "beta")),
             (
-                "1.2.3-label-is-good",
-                SV::new_with_label(1, 2, 3, "label-is-good"),
+                "1.2.3-label-is-good.1",
+                SV::new_with_label(1, 2, 3, "label-is-good.1"),
             ),
             (
                 "v200.200.200-charlie",
