@@ -1,12 +1,24 @@
+use changelog::ReleaseTitle;
+
 mod changelog;
-mod version;
+mod error;
+mod next_version;
+mod semver;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
-pub enum Version<'a> {
+pub enum NextVersion<'a> {
     Major,
     Minor,
     Patch,
-    Custom(&'a str),
+    Custom(SemanticVersion<'a>),
+}
+
+#[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
+pub struct SemanticVersion<'v> {
+    major: u16,
+    minor: u16,
+    patch: u16,
+    label: Option<&'v str>,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
@@ -20,6 +32,6 @@ pub struct Changelog<'c> {
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub struct Release<'c> {
-    title: &'c str,
+    title: ReleaseTitle<'c>,
     url: Option<&'c str>,
 }

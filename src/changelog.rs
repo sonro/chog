@@ -1,7 +1,13 @@
-use crate::{Changelog, Release};
+use crate::{Changelog, Release, SemanticVersion};
 
 const UNRELEASED_TITLE: &str = "## [Unreleased]";
 const RELEASE_PREFIX: &str = "## [";
+
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+pub enum ReleaseTitle<'c> {
+    Title(&'c str),
+    SemVer(SemanticVersion<'c>),
+}
 
 impl<'c> Changelog<'c> {
     pub fn new(input: &'c str) -> Self {
@@ -9,6 +15,12 @@ impl<'c> Changelog<'c> {
             unreleased_content: parse_unreleased(input),
             last_release: parse_last_release(input),
         }
+    }
+}
+
+impl<'c> From<&'c str> for Changelog<'c> {
+    fn from(input: &'c str) -> Self {
+        Changelog::new(input)
     }
 }
 
@@ -37,14 +49,25 @@ fn parse_unreleased(input: &str) -> Option<&str> {
     }
 }
 
+impl<'c> From<&'c str> for ReleaseTitle<'c> {
+    fn from(input: &'c str) -> Self {
+        match SemanticVersion::try_from(input) {
+            Ok(semver) => Self::SemVer(semver),
+            Err(_) => Self::Title(input),
+        }
+    }
+}
+
 fn parse_last_release(input: &str) -> Option<Release> {
     let title = match input.find(UNRELEASED_TITLE) {
         Some(idx) => match_release_title(&input[idx + UNRELEASED_TITLE.len()..]),
         None => match_release_title(input),
     }?;
 
+    let clean_title = &title[1..title.len() - 1];
+
     Some(Release {
-        title: &title[1..title.len() - 1],
+        title: clean_title.into(),
         url: match_release_url(input, title),
     })
 }
@@ -144,7 +167,12 @@ mod tests {
 
     const FULL_UNRELEASED_CONTENT: &str = include_str!("../test_changelogs/just_unreleased.md");
     const FULL_LAST_RELEASE: Release = Release {
-        title: "1.0.0",
+        title: ReleaseTitle::SemVer(SemanticVersion {
+            major: 1,
+            minor: 0,
+            patch: 0,
+            label: None,
+        }),
         url: Some("https://github.com/user/repo/releases/tag/v1.0.0"),
     };
 }

@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use chog::{InvalidVersion, Version};
+use chog::{InvalidVersion, NextVersion};
 
 use super::Error;
 
@@ -12,7 +12,7 @@ pub struct App<'a> {
     pub quiet: bool,
     pub force: bool,
     pub dry_run: bool,
-    pub version: Version<'a>,
+    pub version: NextVersion<'a>,
     pub in_file: Option<&'a Path>,
     pub out_file: Option<&'a Path>,
 }
@@ -25,7 +25,7 @@ impl<'a> Default for App<'a> {
             quiet: false,
             force: false,
             dry_run: false,
-            version: Version::Patch,
+            version: NextVersion::Patch,
             in_file: None,
             out_file: None,
         }
@@ -55,7 +55,7 @@ impl<'a> App<'a> {
                     args.next();
                 }
             } else {
-                version = Some(Version::try_from(arg)?);
+                version = Some(NextVersion::try_from(arg)?);
             }
         }
 
@@ -159,7 +159,7 @@ mod tests {
             quiet: false,
             force: false,
             dry_run: false,
-            version: Version::Patch,
+            version: NextVersion::Patch,
             in_file: None,
             out_file: None,
         };
@@ -316,7 +316,7 @@ mod tests {
 
     #[test]
     fn invalid_custom_versions_error() {
-        let invalids = ["1.a.2", "0.0", "0", "v1.2.3", "2.3.4.5", "2.3.4no"];
+        let invalids = ["1.a.2", "0.0", "0", "2.3.4.5", "2.3.4no"];
         for v in invalids {
             check_error(Error::InvalidVersion(v.into()), &[v]);
         }
@@ -324,7 +324,14 @@ mod tests {
 
     #[test]
     fn valid_custom_versions() {
-        let valids = ["0.0.0", "0.1.2", "1.2.3", "1.2.3-beta"];
+        let valids = [
+            "0.0.0",
+            "0.1.2",
+            "1.2.3",
+            "1.2.3-beta",
+            "v0.0.0",
+            "v200.200.200-label",
+        ];
         for v in valids {
             check(Expected::new().version(v), &[v]);
         }
@@ -361,22 +368,22 @@ mod tests {
         builder_fn! {dry_run}
 
         fn major(mut self) -> Self {
-            self.app.version = Version::Major;
+            self.app.version = NextVersion::Major;
             self
         }
 
         fn minor(mut self) -> Self {
-            self.app.version = Version::Minor;
+            self.app.version = NextVersion::Minor;
             self
         }
 
         fn patch(mut self) -> Self {
-            self.app.version = Version::Patch;
+            self.app.version = NextVersion::Patch;
             self
         }
 
         fn version(mut self, v: &'a str) -> Self {
-            self.app.version = Version::Custom(v);
+            self.app.version = NextVersion::Custom(v.try_into().expect("valid custom version"));
             self
         }
 
