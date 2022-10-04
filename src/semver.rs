@@ -11,6 +11,7 @@ impl<'v> SemanticVersion<'v> {
             label: None,
         }
     }
+
     pub fn new_with_label(major: u16, minor: u16, patch: u16, label: &'v str) -> Self {
         let label = Some(label);
         Self {
