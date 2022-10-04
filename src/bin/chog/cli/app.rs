@@ -1,21 +1,8 @@
 use std::path::Path;
 
-use chog::{InvalidVersion, NextVersion};
+use chog::NextVersion;
 
-use super::Error;
-
-#[derive(Debug)]
-#[cfg_attr(test, derive(PartialEq, Eq))]
-pub struct App<'a> {
-    pub help: bool,
-    pub info: bool,
-    pub quiet: bool,
-    pub force: bool,
-    pub dry_run: bool,
-    pub version: NextVersion<'a>,
-    pub in_file: Option<&'a Path>,
-    pub out_file: Option<&'a Path>,
-}
+use super::{App, Error};
 
 impl<'a> Default for App<'a> {
     fn default() -> Self {
@@ -118,12 +105,6 @@ fn path_from_arg<'a>(next_arg: Option<&&'a str>) -> Result<&'a Path, Error> {
     match next_arg {
         Some(&arg) => Ok(Path::new(arg)),
         None => Err(Error::NoPath),
-    }
-}
-
-impl From<InvalidVersion> for Error {
-    fn from(err: InvalidVersion) -> Self {
-        Self::InvalidVersion(err)
     }
 }
 
