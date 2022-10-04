@@ -16,9 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Lib
 
-- Version from strings.
-- `new` method on Version.
-- Changelog parsing.
+- `NextVersion` type.
+- Changelog parsing with `Changelog` and `Release` types.
 - `SemanticVersion` type.
 
 ## [0.1.0] - 2022-10-02

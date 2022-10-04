@@ -1,13 +1,7 @@
-use crate::{Changelog, Release, SemanticVersion};
+use crate::{Changelog, Release};
 
 const UNRELEASED_TITLE: &str = "## [Unreleased]";
 const RELEASE_PREFIX: &str = "## [";
-
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
-pub enum ReleaseTitle<'c> {
-    Title(&'c str),
-    SemVer(SemanticVersion<'c>),
-}
 
 impl<'c> Changelog<'c> {
     pub fn new(input: &'c str) -> Self {
@@ -46,15 +40,6 @@ fn parse_unreleased(input: &str) -> Option<&str> {
         }
         // no unreleased section
         None => None,
-    }
-}
-
-impl<'c> From<&'c str> for ReleaseTitle<'c> {
-    fn from(input: &'c str) -> Self {
-        match SemanticVersion::try_from(input) {
-            Ok(semver) => Self::SemVer(semver),
-            Err(_) => Self::Title(input),
-        }
     }
 }
 
@@ -107,6 +92,8 @@ fn match_release_url<'c>(input: &'c str, title: &'c str) -> Option<&'c str> {
 
 #[cfg(test)]
 mod tests {
+    use crate::{release::ReleaseTitle, SemanticVersion};
+
     use super::*;
 
     #[test]

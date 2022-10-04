@@ -1,8 +1,9 @@
-use changelog::ReleaseTitle;
+use release::ReleaseTitle;
 
 mod changelog;
 mod error;
 mod next_version;
+mod release;
 mod semver;
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
@@ -30,7 +31,7 @@ pub struct Changelog<'c> {
     last_release: Option<Release<'c>>,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
 pub struct Release<'c> {
     title: ReleaseTitle<'c>,
     url: Option<&'c str>,
