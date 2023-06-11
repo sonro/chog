@@ -1,30 +1,14 @@
 # chog
 
-`chog` is a simple program to bump the version in a CHANGELOG file. Following
-the format layed out in [Keep a Changelog], everything in `Unreleased` will be
-moved into a new section; named after the new release. The GitHub comparison
-links are updated to the latest tags. Ideally used for manually updated
-changelogs.
+[Keep A Changelog](https://keepachangelog.com/en/1.0.0/) representation, parsing
+and management.
 
-[![license](https://img.shields.io/crates/l/chog.svg)](#license)
-
-## Recommended environment
-
-`chog` is highly opinionated. In order for it to be effective it is recommended
-to:
-
-- Format changelog in reference to [Keep a Changelog].
-- Use git as your version control system.
-- Host your repository on GitHub.
-- Tag your versions using the v0.0.0 style.
-- Use [Semantic Versioning](https://semver.org/).
-- Use CHANGELOG.md as your file name.
+- [Rust Library](lib/)
+- [Command Line App](bin/)
 
 ## License
 
-chog is distributed under the terms of both the MIT license and the
-Apache License (Version 2.0).
+Both the library and the application are distributed under the terms of both the
+MIT license and the Apache License (Version 2.0).
 
 See [LICENSE-APACHE](LICENSE-APACHE) and [LICENSE-MIT](LICENSE-MIT) for details.
-
-[Keep a Changelog]: https://keepachangelog.com/en/1.0.0/

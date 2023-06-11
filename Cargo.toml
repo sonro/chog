@@ -4,6 +4,5 @@ members = ["lib", "bin"]
 
 [workspace.package]
 authors = ["Christopher Morton <sonro@gmx.com>"]
-edition = "2021"
 repository = "https://github.com/sonro/chog"
 license = "MIT/Apache-2.0"
