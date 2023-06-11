@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### [**BREAKING**] Project changes
+
+- Cli and Lib now separate packages.
+- Lib is now based on parsing and manipulating a CHANGELOG.md file, not just
+  for updating the "Unreleased" section.
+- Bin is now a development tool not just for updating the "Unreleased" section.
+
 ### Added
 
 #### Cli

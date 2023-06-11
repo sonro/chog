@@ -1,4 +1,4 @@
-use std::{cmp::Ordering, fmt};
+use std::{cmp::Ordering, convert::TryFrom, fmt};
 
 use crate::{InvalidVersion, SemanticVersion};
 

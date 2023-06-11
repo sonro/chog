@@ -34,7 +34,8 @@ fn new_empty_unreleased_input() {
     assert_eq!(EMPTY_UNRELEASED_CHANGELOG_STRUCT, chog);
 }
 
-const EMPTY_UNRELEASED_CHANGELOG: &str = include_str!("../../test_changelogs/empty_unreleased.md");
+const EMPTY_UNRELEASED_CHANGELOG: &str =
+    include_str!("../../../test_changelogs/empty_unreleased.md");
 const EMPTY_UNRELEASED_CHANGELOG_STRUCT: Changelog = Changelog {
     #[cfg(target_family = "windows")]
     unreleased_content: Some("\r\n"),
@@ -43,20 +44,20 @@ const EMPTY_UNRELEASED_CHANGELOG_STRUCT: Changelog = Changelog {
     last_release: Some(FULL_LAST_RELEASE),
 };
 
-const NO_RELEASE_CHANGELOG: &str = include_str!("../../test_changelogs/no_release.md");
+const NO_RELEASE_CHANGELOG: &str = include_str!("../../../test_changelogs/no_release.md");
 const NO_RELEASE_CHANGELOG_STRUCT: Changelog = Changelog {
     unreleased_content: Some(FULL_UNRELEASED_CONTENT),
     last_release: None,
 };
 
-const WEIRD_CHANGELOG: &str = include_str!("../../test_changelogs/full_weird_link.md");
-const FULL_CHANGELOG: &str = include_str!("../../test_changelogs/full.md");
+const WEIRD_CHANGELOG: &str = include_str!("../../../test_changelogs/full_weird_link.md");
+const FULL_CHANGELOG: &str = include_str!("../../../test_changelogs/full.md");
 const FULL_CHANGELOG_STRUCT: Changelog = Changelog {
     unreleased_content: Some(FULL_UNRELEASED_CONTENT),
     last_release: Some(FULL_LAST_RELEASE),
 };
 
-const FULL_UNRELEASED_CONTENT: &str = include_str!("../../test_changelogs/just_unreleased.md");
+const FULL_UNRELEASED_CONTENT: &str = include_str!("../../../test_changelogs/just_unreleased.md");
 const FULL_LAST_RELEASE: Release = Release {
     title: ReleaseTitle::SemVer(SemanticVersion {
         major: 1,

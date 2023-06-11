@@ -4,4 +4,11 @@ version = 3
 
 [[package]]
 name = "chog"
-version = "0.1.0"
+version = "0.2.0"
+
+[[package]]
+name = "chog-cli"
+version = "0.2.0"
+dependencies = [
+ "chog",
+]
