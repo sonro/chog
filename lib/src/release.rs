@@ -70,7 +70,19 @@ mod tests {
 
     #[test]
     fn ordering() {
-        let low_to_high = ["0.1.1", "0.1.2", "0.0.0.1", "bad-title", "later-bad-title"];
+        let low_to_high = [
+            "0.1.1",
+            "0.1.2",
+            "1.0.0-alpha",
+            "1.0.0-beta",
+            "1.0.0",
+            "1.0.1",
+            "1.1.0",
+            "1.1.1",
+            "0.0.0.1",
+            "bad-title",
+            "later-bad-title",
+        ];
 
         for w in low_to_high.windows(2) {
             let low = ReleaseTitle::from(w[0]);
