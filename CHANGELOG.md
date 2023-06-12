@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   for updating the "Unreleased" section.
 - Bin is now a development tool not just for updating the "Unreleased" section.
 
+### Changed
+
+- [**BREAKING**] All types that had borrowed strings now can be either owned or
+  borrowed.
+- [**BREAKING**] Changelog full representation.
+
 ### Added
 
 #### Cli
