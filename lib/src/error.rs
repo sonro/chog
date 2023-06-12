@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{borrow::Cow, fmt};
 
 use crate::InvalidVersion;
 
@@ -12,6 +12,18 @@ impl std::error::Error for InvalidVersion {}
 
 impl From<&str> for InvalidVersion {
     fn from(v: &str) -> Self {
+        InvalidVersion(v.into())
+    }
+}
+
+impl From<String> for InvalidVersion {
+    fn from(v: String) -> Self {
+        InvalidVersion(v)
+    }
+}
+
+impl From<Cow<'_, str>> for InvalidVersion {
+    fn from(v: Cow<'_, str>) -> Self {
         InvalidVersion(v.into())
     }
 }

@@ -1,3 +1,6 @@
+use std::borrow::Cow;
+
+use changelog::LinkFooter;
 use release::ReleaseTitle;
 
 mod changelog;
@@ -6,7 +9,7 @@ mod next_version;
 mod release;
 mod semver;
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub enum NextVersion<'a> {
     Major,
     Minor,
@@ -14,25 +17,27 @@ pub enum NextVersion<'a> {
     Custom(SemanticVersion<'a>),
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
+#[derive(Debug, PartialEq, Eq, Clone, Hash)]
 pub struct SemanticVersion<'v> {
     major: u16,
     minor: u16,
     patch: u16,
-    label: Option<&'v str>,
+    label: Option<Cow<'v, str>>,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct InvalidVersion(String);
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Changelog<'c> {
-    unreleased_content: Option<&'c str>,
-    last_release: Option<Release<'c>>,
+    header: Option<Cow<'c, str>>,
+    unreleased: Option<Release<'c>>,
+    releases: Vec<Release<'c>>,
+    link_footer: Option<LinkFooter<'c>>,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
+#[derive(Debug, PartialEq, Eq, Clone, Hash)]
 pub struct Release<'c> {
     title: ReleaseTitle<'c>,
-    url: Option<&'c str>,
+    url: Option<Cow<'c, str>>,
 }

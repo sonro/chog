@@ -1,10 +1,10 @@
-use std::{cmp::Ordering, fmt};
+use std::{borrow::Cow, cmp::Ordering, fmt};
 
 use crate::{Release, SemanticVersion};
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy, Hash)]
+#[derive(Debug, PartialEq, Eq, Clone, Hash)]
 pub enum ReleaseTitle<'c> {
-    Title(&'c str),
+    Title(Cow<'c, str>),
     SemVer(SemanticVersion<'c>),
 }
 
@@ -41,7 +41,16 @@ impl<'c> From<&'c str> for ReleaseTitle<'c> {
     fn from(input: &'c str) -> Self {
         match SemanticVersion::try_from(input) {
             Ok(semver) => Self::SemVer(semver),
-            Err(_) => Self::Title(input),
+            Err(_) => Self::Title(Cow::Borrowed(input)),
+        }
+    }
+}
+
+impl From<String> for ReleaseTitle<'static> {
+    fn from(input: String) -> Self {
+        match SemanticVersion::try_owned_from(&input) {
+            Ok(semver) => Self::SemVer(semver),
+            _ => Self::Title(Cow::Owned(input)),
         }
     }
 }
