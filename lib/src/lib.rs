@@ -8,6 +8,7 @@ mod error;
 mod next_version;
 mod release;
 mod semver;
+mod util;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum NextVersion<'a> {
@@ -40,4 +41,5 @@ pub struct Changelog<'c> {
 pub struct Release<'c> {
     title: ReleaseTitle<'c>,
     url: Option<Cow<'c, str>>,
+    content: Option<Cow<'c, str>>,
 }

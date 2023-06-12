@@ -1,11 +1,33 @@
 use std::{borrow::Cow, cmp::Ordering, fmt};
 
-use crate::{Release, SemanticVersion};
+use crate::{util::own_optional_cow, Release, SemanticVersion};
+
+impl<'c> Release<'c> {
+    pub fn to_owned(&self) -> Release<'static> {
+        Release {
+            title: self.title.to_owned(),
+            url: own_optional_cow(&self.url),
+            content: own_optional_cow(&self.content),
+        }
+    }
+}
 
 #[derive(Debug, PartialEq, Eq, Clone, Hash)]
 pub enum ReleaseTitle<'c> {
     Title(Cow<'c, str>),
     SemVer(SemanticVersion<'c>),
+}
+
+impl<'c> ReleaseTitle<'c> {
+    pub fn to_owned(&self) -> ReleaseTitle<'static> {
+        match self {
+            ReleaseTitle::SemVer(semver) => ReleaseTitle::SemVer(semver.to_owned()),
+            ReleaseTitle::Title(Cow::Owned(title)) => ReleaseTitle::Title(title.to_owned().into()),
+            ReleaseTitle::Title(Cow::Borrowed(title)) => {
+                ReleaseTitle::Title(String::from(*title).into())
+            }
+        }
+    }
 }
 
 impl<'c> PartialOrd for Release<'c> {
