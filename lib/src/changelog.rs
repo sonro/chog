@@ -1,7 +1,5 @@
 use crate::Changelog;
 
-mod parse;
-
 impl<'c> Changelog<'c> {}
 
 #[derive(Debug, PartialEq, Eq, Clone)]
