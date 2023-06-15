@@ -29,12 +29,12 @@ pub struct SemanticVersion<'v> {
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct InvalidVersion(String);
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Default)]
 pub struct Changelog<'c> {
     header: Option<Cow<'c, str>>,
     unreleased: Option<Release<'c>>,
     releases: Vec<Release<'c>>,
-    link_footer: Option<LinkFooter<'c>>,
+    misc_links: Vec<Cow<'c, str>>,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Hash)]
