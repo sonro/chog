@@ -1,9 +1,11 @@
-# chog
+# chog - WIP
 
 [![crates.io](https://img.shields.io/crates/v/chog)](https://crates.io/crates/chog)
 [![license](https://img.shields.io/crates/l/chog.svg)](#license)
 
 Rust library providing changelog parsing, building and manipulation.
+
+Work in progress
 
 ## License
 

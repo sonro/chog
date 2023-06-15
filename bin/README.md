@@ -1,9 +1,11 @@
-# chog-cli
+# chog-cli - WIP
 
 [![crates.io](https://img.shields.io/crates/v/chog-cli)](https://crates.io/crates/chog-cli)
 [![license](https://img.shields.io/crates/l/chog.svg)](#license)
 
 Changelog management command line interface.
+
+Work in progress
 
 ## License
 
