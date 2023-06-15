@@ -41,5 +41,6 @@ pub struct Changelog<'c> {
 pub struct Release<'c> {
     title: ReleaseTitle<'c>,
     url: Option<Cow<'c, str>>,
+    date: Option<Cow<'c, str>>,
     content: Option<Cow<'c, str>>,
 }

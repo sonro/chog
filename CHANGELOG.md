@@ -18,7 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [**BREAKING**] All types that had borrowed strings now can be either owned or
   borrowed.
-- [**BREAKING**] Changelog full representation.
+- [**BREAKING**] Full Changelog representation with all releases and their
+  dates.
 
 ### Added
 

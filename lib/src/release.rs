@@ -7,6 +7,7 @@ impl<'c> Release<'c> {
         Release {
             title: self.title.to_owned(),
             url: own_optional_cow(&self.url),
+            date: own_optional_cow(&self.date),
             content: own_optional_cow(&self.content),
         }
     }
