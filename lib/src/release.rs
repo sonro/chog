@@ -20,6 +20,10 @@ pub enum ReleaseTitle<'c> {
 }
 
 impl<'c> ReleaseTitle<'c> {
+    pub fn unreleased() -> ReleaseTitle<'static> {
+        ReleaseTitle::Title(Cow::Borrowed("Unreleased"))
+    }
+
     pub fn to_owned(&self) -> ReleaseTitle<'static> {
         match self {
             ReleaseTitle::SemVer(semver) => ReleaseTitle::SemVer(semver.to_owned()),
