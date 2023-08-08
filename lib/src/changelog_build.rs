@@ -1,7 +1,6 @@
 use std::borrow::Cow;
 
 use crate::{
-    release::ReleaseTitle,
     util::{trim_to_optcow_borrow, trim_to_optcow_owned},
     Changelog, ChangelogBuilder, Release,
 };
@@ -33,10 +32,9 @@ impl<'c> ChangelogBuilder<'c> {
         self
     }
 
-    pub fn unreleased(mut self, mut unreleased: Release<'c>) -> Self {
-        unreleased.date = None;
-        unreleased.title = ReleaseTitle::unreleased();
-        self.changelog.unreleased = unreleased;
+    pub fn unreleased(mut self, unreleased: Release<'c>) -> Self {
+        self.changelog.unreleased.url = unreleased.url;
+        self.changelog.unreleased.content = unreleased.content;
         self
     }
 
