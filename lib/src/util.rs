@@ -4,6 +4,7 @@ pub fn own_optional_cow(cow: &Option<Cow<'_, str>>) -> Option<Cow<'static, str>>
     cow.as_ref().map(|cow| Cow::Owned(cow.clone().into_owned()))
 }
 
+#[allow(unused)]
 pub fn trim_to_optcow<'a, T: Into<Cow<'a, str>>>(input: T) -> Option<Cow<'a, str>> {
     return match input.into() {
         Cow::Borrowed(input) => trim_to_optcow_borrow(input),

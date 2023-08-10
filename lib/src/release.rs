@@ -1,21 +1,30 @@
 use std::{borrow::Cow, cmp::Ordering, fmt};
 
-use crate::{
-    util::{own_optional_cow, trim_to_optcow},
-    Release, SemanticVersion,
-};
+use crate::{util::own_optional_cow, Release, SemanticVersion};
 
 impl<'c> Release<'c> {
     pub fn title_string(&self) -> String {
         self.title.to_string()
     }
 
-    pub fn set_url<T: Into<Cow<'c, str>>>(&mut self, url: T) {
-        self.url = trim_to_optcow(url);
-    }
-
     pub fn content(&self) -> Option<&str> {
         self.content.as_deref()
+    }
+
+    pub fn url(&self) -> Option<&str> {
+        self.url.as_deref()
+    }
+
+    pub fn date(&self) -> Option<&str> {
+        self.date.as_deref()
+    }
+
+    pub fn set_content<T: Into<Cow<'c, str>>>(&mut self, url: T) {
+        let content = url.into();
+        self.content = match content.is_empty() {
+            true => None,
+            false => Some(content),
+        }
     }
 
     pub fn mut_content(&mut self) -> &mut String {
@@ -28,15 +37,15 @@ impl<'c> Release<'c> {
         }
     }
 
-    pub fn url(&self) -> Option<&str> {
-        self.url.as_deref()
+    pub fn set_url<T: Into<Cow<'c, str>>>(&mut self, url: T) {
+        let url = url.into();
+        self.url = match url.is_empty() {
+            true => None,
+            false => Some(url),
+        }
     }
 
-    pub fn date(&self) -> Option<&str> {
-        self.date.as_deref()
-    }
-
-    pub fn to_owned(&self) -> Release<'static> {
+    pub fn to_owned(self) -> Release<'static> {
         Release {
             title: self.title.to_owned(),
             url: own_optional_cow(&self.url),
