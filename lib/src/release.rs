@@ -1,8 +1,41 @@
 use std::{borrow::Cow, cmp::Ordering, fmt};
 
-use crate::{util::own_optional_cow, Release, SemanticVersion};
+use crate::{
+    util::{own_optional_cow, trim_to_optcow},
+    Release, SemanticVersion,
+};
 
 impl<'c> Release<'c> {
+    pub fn title_string(&self) -> String {
+        self.title.to_string()
+    }
+
+    pub fn set_url<T: Into<Cow<'c, str>>>(&mut self, url: T) {
+        self.url = trim_to_optcow(url);
+    }
+
+    pub fn content(&self) -> Option<&str> {
+        self.content.as_deref()
+    }
+
+    pub fn mut_content(&mut self) -> &mut String {
+        match self.content {
+            Some(ref mut cow) => cow.to_mut(),
+            None => {
+                self.content = Some(Cow::Owned(String::new()));
+                self.content.as_mut().unwrap().to_mut()
+            }
+        }
+    }
+
+    pub fn url(&self) -> Option<&str> {
+        self.url.as_deref()
+    }
+
+    pub fn date(&self) -> Option<&str> {
+        self.date.as_deref()
+    }
+
     pub fn to_owned(&self) -> Release<'static> {
         Release {
             title: self.title.to_owned(),
