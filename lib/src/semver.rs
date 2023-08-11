@@ -1,6 +1,6 @@
 use std::{borrow::Cow, cmp::Ordering, fmt};
 
-use crate::{util::own_optional_cow, InvalidVersion, SemanticVersion};
+use crate::{util::optcow_to_owned, InvalidVersion, SemanticVersion};
 
 impl<'v> SemanticVersion<'v> {
     pub fn new(major: u16, minor: u16, patch: u16) -> Self {
@@ -27,7 +27,7 @@ impl<'v> SemanticVersion<'v> {
     }
 
     pub fn to_owned(&'v self) -> SemanticVersion<'static> {
-        let label = own_optional_cow(&self.label);
+        let label = optcow_to_owned(self.label.clone());
         SemanticVersion {
             major: self.major,
             minor: self.minor,

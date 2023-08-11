@@ -1,10 +1,10 @@
-use crate::{Changelog, ReleaseBuilder};
+use crate::{Changelog, Unreleased};
 
 impl<'c> Default for Changelog<'c> {
     fn default() -> Self {
         Self {
             header: None,
-            unreleased: ReleaseBuilder::unreleased().build(),
+            unreleased: Unreleased::empty(),
             releases: Vec::new(),
             misc_links: Vec::new(),
         }

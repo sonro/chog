@@ -7,7 +7,6 @@ mod changelog_build;
 mod error;
 mod next_version;
 mod release;
-mod release_build;
 mod semver;
 mod unreleased;
 mod util;
@@ -50,11 +49,6 @@ pub struct Release<'c> {
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct ChangelogBuilder<'c> {
     changelog: Changelog<'c>,
-}
-
-#[derive(Debug, PartialEq, Eq, Clone)]
-pub struct ReleaseBuilder<'c> {
-    release: Release<'c>,
 }
 
 #[derive(Debug)]

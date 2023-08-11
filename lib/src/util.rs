@@ -1,7 +1,15 @@
 use std::borrow::Cow;
 
-pub fn own_optional_cow(cow: &Option<Cow<'_, str>>) -> Option<Cow<'static, str>> {
-    cow.as_ref().map(|cow| Cow::Owned(cow.clone().into_owned()))
+pub fn optcow<'a, T: Into<Cow<'a, str>>>(input: T) -> Option<Cow<'a, str>> {
+    let cow = input.into();
+    match cow.is_empty() {
+        true => None,
+        false => Some(cow),
+    }
+}
+
+pub fn optcow_to_owned(cow: Option<Cow<'_, str>>) -> Option<Cow<'static, str>> {
+    cow.map(|cow| Cow::Owned(cow.into_owned()))
 }
 
 #[allow(unused)]
